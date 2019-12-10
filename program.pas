@@ -28,10 +28,14 @@ function sub(v1, v2: vector): vector; begin
   sub.z := v1.z - v2.z;
 end;
 
-function mult(k : single, v : vector): vector; begin
+function mult(k : single; v : vector): vector; begin
   mult.x := k * v.x;
   mult.y := k * v.y;
   mult.z := k * v.z;
+end;
+
+function dot(v1, v2 : vector): single; begin
+  dot := v1.x*v2.x + v1.y*v2.y + v1.z*v2.z;
 end;
 
 function cross(v1, v2 : vector): vector; begin
@@ -71,7 +75,13 @@ begin
 end;
 
 // Функции симуляции
-function tension(r: vector): 
+function tension(r: vector): vector; 
+var
+  c : single;
+begin
+  c := 2*k*lambda/Sqr(len(r));
+  tension := mult(c, k);
+end;
 
 const
   dt: single =    1.0E-6;                   // Шаг в секундах
@@ -88,28 +98,49 @@ var
   electron_vel : vector;
   electron_acc : vector;
 
+  // Переменные параметры нити
+  lambda : single; 
+
   // Ориентация нити в пространстве
   line_point : vector;
   line_vector: vector;
 
-  s1 : string = 'aaaaa';
-  s2 : string = 'bbbbb';
+  info : string = '';
 
   distToRod : single = 0;
 
 begin
-  electron_pos.x := 3;
-  electron_pos.y := -1;
-  electron_pos.z := -4;
+  write('electron start x: ');
+  readln(electron_pos.x);
 
-  line_vector.x := 2;
-  line_vector.y := 1;
-  line_vector.z := 2;
+  write('electron start y: ');
+  readln(electron_pos.y);
+
+  write('electron start z: ');
+  readln(electron_pos.z);
+
+  write('rod start x: ');
+  readln(line_point.x);
+
+  write('rod start y: ');
+  readln(line_point.y);
+
+  write('rod start z: ');
+  readln(line_point.z);
+
+  write('rod orientation x: ');
+  readln(line_vector.x);
+
+  write('rod orientation y: ');
+  readln(line_vector.y);
+
+  write('rod orientation z: ');
+  readln(line_vector.z);
 
   electron_vel := cross(electron_pos, line_vector);
   distToRod := len(electron_vel) / len(line_vector);
 
-  s1 := vecToString(electron_vel);
+  info := vecToString(electron_vel);
 
-  writeln('hello, world. ', s1, ' || => ', distToRod);
+  writeln(info, ' || => ', distToRod);
 end.
