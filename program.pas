@@ -44,6 +44,14 @@ function cross(v1, v2 : vector): vector; begin
   cross.z := v1.x*v2.y - v1.y*v2.x;
 end;
 
+function norm(v1:vector ): vector; 
+var
+  c : single;
+begin
+  c := 1 / len(v1);
+  norm := mult(c, v1);
+end;
+
 function vecToString(v: vector): string;
 var
   result : string = '';
@@ -136,6 +144,8 @@ begin
 
   write('rod orientation z: ');
   readln(line_vector.z);
+
+  line_vector := norm(line_vector);
 
   electron_vel := cross(electron_pos, line_vector);
   distToRod := len(electron_vel) / len(line_vector);
